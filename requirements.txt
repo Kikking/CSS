@@ -1,3 +1,4 @@
+spaCy==2.3.9
 streamlit
 os-sys
 pandas
