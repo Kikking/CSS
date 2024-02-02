@@ -1,3 +1,4 @@
+libgeos-dev
 streamlit
 os-sys
 pandas
