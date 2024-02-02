@@ -1,5 +1,5 @@
 streamlit
-os
+os-sys
 pandas
 matplotlib.pyplot
 numpy
