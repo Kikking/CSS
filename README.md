@@ -38,6 +38,33 @@ Both graphs are plotted together as a subplot:
           ml.ylim((0, 300000))
           axs[1].vlines(df_mean, ymin = 0, ymax = 300000, label = "Mean")
 
+
+# Sequence Quality Plot 
+To compare the quality of each sequence across the dataframe, a line plot is implemented. 
+     
+     def line_plot(df,df2):
+         fig, ax = ml.subplots()
+         df = df.sort_values(by='quals', ascending=True)
+         df['row_number'] = range(1, len(df) + 1)
+        
+         df2 = df2.sort_values(by='quals', ascending=True)
+         df2['row_number'] = range(1, len(df2) + 1)
+         ax.plot(df['row_number'], df["quals"], label=df["basecaller"][0], linewidth=1.2, alpha=0.8)
+         ax.plot(df2['row_number'], df2["quals"], label=df2["basecaller"][0], linewidth=1.2, alpha=0.8)
+         ml.style.use('dark_background')
+         ml.legend()
+
+# Plot Calling 
+
+To allow for easier calling of plot functions, a wrapper function was created to call either plotting function based on the "feature" parameter specified. 
+
+     def df_maker(url,feature,tool):
+         if tool == "nanoplot":
+             df = nanostat(url,feature)
+         elif tool == "longqc":
+             df = sdust_sum(url,feature)
+         return df
+
 # Streamlit Integration
 
 Two column sections were defined to organise the buttons across the page:
@@ -48,24 +75,31 @@ To ensure that the plot is generated in the centre of the page, an empty contain
 
     plot_container = str.empty()
     
-The length plot is then called when each button is clicked. Each button assigns a different x value passed to the data processing functions. x = 0 calls the A549 dataset and x = 2 calls the K562 dataset. 
+The length plot is then called when each button is clicked. 
 
-    with col1:
-         if str.button('Blood Cells'):
-             plot_container.write("Massaging Data...")
-             x=3
-             plot_container.empty()
-           # Display plot from function
-             
-             plot_container.pyplot( length_plot(sdust_sum(x),nanostat(x)))
-              
+       str.subheader("Click on a Cell Type to Analyse:")
+         col1, col2 = str.columns(2)  # Create two columns with equal width
+         plot_container = str.empty()
+         with col1:
+              if str.button('Blood Cells'):
+                  plot_container.write("Massaging Data...")
+                  x=3
+                  plot_container.empty()
+                # Display plot from function
+                  
+             plot_container.pyplot( line_plot(df_maker(guppy_K, "quals", "longqc"),df_maker(dor_K, "quals", "nanoplot")))
+                
+            
+       
     with col2:
          if str.button('Lung Cells'):
              plot_container.write("Massaging Data...")
+            
              x=0
              plot_container.empty()
            # Display plot from function
-             plot_container.pyplot( length_plot(sdust_sum(x),nanostat(x)))
+             plot_container.pyplot( line_plot(df_maker(guppy_A, "quals", "longqc"),df_maker(dor_A, "quals", "nanoplot")))
+
                
               
         
