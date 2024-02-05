@@ -1,13 +1,10 @@
 # Benchmarking Nanopore Basecalling Tools
 Dependencies:
 
-streamlit
-
-pandas
-
-matplotlib
-
-(Data is stored on GitHub Long Form Storage (LFS))
+     streamlit
+     pandas
+     matplotlib
+     (Data is stored on GitHub Long Form Storage (LFS))
 
 This takes data generated using Long-Read Quality Control tools to effectively measure the produced read lengths. LongQC was used to analyse results from the Guppy Basecaller and Nanoplot was used to analyse results from the Dorado Basecaller. 
 
