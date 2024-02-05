@@ -13,7 +13,7 @@ import numpy as np
 #TOY DATA from Github Repo
 guppy_K = "https://github.com/Kikking/CSS/raw/9e119a7bc200a745bfb87a0754109a482ef8d2df/streamlit_data/longqc/K_d_r1r2/longqc_sdust.txt"
 guppy_A = "https://github.com/Kikking/CSS/raw/9e119a7bc200a745bfb87a0754109a482ef8d2df/streamlit_data/longqc/A_d_r1r3/longqc_sdust.txt"
-dor_K = "https://github.com/Kikking/CSS/raw/9e119a7bc200a745bfb87a0754109a482ef8d2df/streamlit_data/nanoplot/K_d_r1r2/NanoPlot-data.tsv.gz"
+dor_K = "https://github.com/Kikking/CSS/raw/00d971f95050da35005850a02bc06ffdae8a331e/streamlit_data/nanoplot/K_d_r1r2/NanoPlot-data.tsv.gz"
 dor_A = "https://github.com/Kikking/CSS/raw/ee71314afcf0ccb0d26c9bcd78d9da1d436bc1b6/streamlit_data/nanoplot/A_d_r1r3/NanoPlot-data.tsv.gz"
 str.set_page_config(page_title="My App", page_icon=None, layout="centered")#theme = "dark")
 
