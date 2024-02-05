@@ -6,85 +6,79 @@ Created on Mon Jan 29 15:08:32 2024
 """
 
 import streamlit as str
-#import os
 import pandas as pd
 import matplotlib.pyplot as ml
 import numpy as np
 
-
-
+#TOY DATA from Github Repo
+guppy_K = "https://github.com/Kikking/CSS/raw/9e119a7bc200a745bfb87a0754109a482ef8d2df/streamlit_data/longqc/K_d_r1r2/longqc_sdust.txt"
+guppy_A = "https://github.com/Kikking/CSS/raw/9e119a7bc200a745bfb87a0754109a482ef8d2df/streamlit_data/longqc/A_d_r1r3/longqc_sdust.txt"
+dor_K = "https://github.com/Kikking/CSS/raw/9e119a7bc200a745bfb87a0754109a482ef8d2df/streamlit_data/nanoplot/K_d_r1r2/NanoPlot-data.tsv.gz"
+dor_A = "https://github.com/Kikking/CSS/raw/ee71314afcf0ccb0d26c9bcd78d9da1d436bc1b6/streamlit_data/nanoplot/A_d_r1r3/NanoPlot-data.tsv.gz"
 str.set_page_config(page_title="My App", page_icon=None, layout="centered")#theme = "dark")
 
 #for extracting data from nanoplot. x = {0 (A549) or 1 (K562)}. feature = {"quals" or "lengths"}
-def nanostat(x,feature):
-    nano_directory_path = "C:/Users/User/CSS/streamlit_data/nanoplot"
-    nano_stats = os.listdir(nano_directory_path)
-    QC_table = pd.DataFrame()
-      
-    temp_file = nano_stats[x:x+1]
-    print(temp_file)
-    for sample in temp_file :
-          file_path = os.path.join('D:\SGNEX\\nplot', sample, 'NanoPlot-data.tsv.gz')
-          if os.path.exists(file_path):
-              temp = pd.read_csv(file_path, sep ='\t')
-              temp["sample_name"] = sample
-              #for length data
-              if feature == "l":
-                  temp = temp[["lengths","sample_name"]]
-              #for sequence quality data
-              elif feature == "q":
-                  temp = temp[["quals","sample_name"]]   
-              temp["basecaller"] = "Dorado"
-              temp['cell'] = temp['sample_name'].apply(lambda x: 'A549' if 'A' in x else
-                                             'MCF7' if 'M' in x else
-                                             'K546' if 'K' in x else
-                                             'HepG2' if 'H' in x else
-                                             'Hct116' if 'Hc' in x else
-                                             None)
-        
-    
-             
-              QC_table = pd.concat([QC_table, temp])
-              return QC_table
-        
-          else: print(f"The file {file_path} does not exist.")
-#for extracting data from longQC. x = {0 (A549) or 1 (K562)}. feature = {"quals" or "lengths"}
-def sdust_sum(x, feature):
-    long_directory_path = "C:/Users/User/CSS/streamlit_data/longqc"
-    long_stats = os.listdir(long_directory_path)
-    QC_table = pd.DataFrame() 
-    temp_file = long_stats[x:x+1]
-    for sample in temp_file:
-        
-        file_path = os.path.join("C:/Users/User/CSS/streamlit_data/longqc", sample, "longqc_sdust.txt")
-        if os.path.exists(file_path):
-            temp = pd.read_csv(file_path, sep="\t", names=["read_name", "num_masked", "lengths", "masked_fraction", "quals", "QV7"])
-            temp["sample_name"] = sample
-            #for length data
-            if feature == "l":
-                temp = temp[["lengths","sample_name"]]
-            #for sequence quality data
-            elif feature == "q":
-                temp = temp[["quals","sample_name"]]
-            temp["basecaller"] = "Guppy"
-         
-            temp['cell'] = temp['sample_name'].apply(lambda x: 'A549' if 'A' in x else
-                                           'MCF7' if 'M' in x else
-                                           'K546' if 'K' in x else
-                                           'HepG2' if 'H' in x else
-                                           'Hct116' if 'Hc' in x else
-                                           None)
-         
-    
-    
-          
-            QC_table = pd.concat([QC_table, temp])
-           
-            return QC_table
+def print_var_name(variable):
+    if variable.find("A_d") != -1:
+        return "A549"
+    elif variable.find("K_d") != -1:
+        return "K562"
+    else: return "No Cell Detected"
 
-        else: print(f"The file {file_path} does not exist.")
+
+def nanostat(url,feature):
+
+    QC_table = pd.DataFrame()
+    print(url)      
+    temp = pd.read_table(url, sep ='\t')
+    temp["sample_name"] = print_var_name(url)
+    #for length data
+    if feature == "l":
+        temp = temp[["lengths","sample_name"]]
+    #for sequence quality data
+    elif feature == "q":
+        temp = temp[["quals","sample_name"]]   
+    temp["basecaller"] = "Dorado"
+    temp['cell'] = temp['sample_name'].apply(lambda x: 'A549' if 'A' in x else
+                                   'MCF7' if 'M' in x else
+                                   'K546' if 'K' in x else
+                                   'HepG2' if 'H' in x else
+                                   'Hct116' if 'Hc' in x else
+                                   None)
+    
+    QC_table = pd.concat([QC_table, temp])
+    return QC_table
+        
+#for extracting data from longQC. x = {0 (A549) or 1 (K562)}. feature = {"quals" or "lengths"}
+def sdust_sum(url, feature):
+    
+    QC_table = pd.DataFrame() 
+    
+    temp = pd.read_csv(url, sep="\t", names=["read_name", "num_masked", "lengths", "masked_fraction", "quals", "QV7"])
+    temp["sample_name"] = print_var_name(url)
+    #for length data
+    if feature == "l":
+        temp = temp[["lengths","sample_name"]]
+    #for sequence quality data
+    elif feature == "q":
+        temp = temp[["quals","sample_name"]]
+    temp["basecaller"] = "Guppy"
+     
+    temp['cell'] = temp['sample_name'].apply(lambda x: 'A549' if 'A' in x else
+                                   'MCF7' if 'M' in x else
+                                   'K546' if 'K' in x else
+                                   'HepG2' if 'H' in x else
+                                   'Hct116' if 'Hc' in x else
+                                   None)
+      
+    QC_table = pd.concat([QC_table, temp])
+       
+    return QC_table
+
+     
 
 #Deploys either nanostat() or sdust_sum() based on specified tool. ("longqc" or "nanoplot")
+@str.cache_data
 def df_maker(x,feature,tool):
     if tool == "nanoplot":
         df = nanostat(x,feature)
@@ -106,6 +100,7 @@ def line_plot(df,df2):
     ml.legend()
     #str.pyplot(fig)    
 #plots a histogram of read-length distribution between two dataframes made by df_maker().
+@str.cache_data
 def length_plot(df,df2, xfilt=5000):
     df_mean = df["lengths"].mean()
     df2_mean =df2["lengths"].mean()
