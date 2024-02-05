@@ -1,12 +1,14 @@
 # Benchmarking Nanopore Basecalling Tools
+
+This takes data generated using Long-Read Quality Control tools to effectively measure the produced read lengths. LongQC was used to analyse results from the Guppy Basecaller and Nanoplot was used to analyse results from the Dorado Basecaller.
+
 Dependencies:
 
      streamlit
      pandas
      matplotlib
      (Data is stored on GitHub Long Form Storage (LFS))
-
-This takes data generated using Long-Read Quality Control tools to effectively measure the produced read lengths. LongQC was used to analyse results from the Guppy Basecaller and Nanoplot was used to analyse results from the Dorado Basecaller. 
+ 
 
 # Data Extraction
 File names are abbreviated according to their cell type. eg, A_d_r1r3 comes from the A549 cell line and K_d_r1r2 comes from the K562 cell line. This information was thus extracted to the Cell column using the following code:
