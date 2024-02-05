@@ -101,7 +101,6 @@ def line_plot(df,df2):
     ml.legend()
        
 #plots a histogram of read-length distribution between two dataframes made by df_maker().
-@str.cache_data
 def length_plot(df,df2, xfilt=5000, yfilt = 300000):
     df_mean = df["lengths"].mean()
     df2_mean =df2["lengths"].mean()
